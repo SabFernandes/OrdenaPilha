@@ -2,10 +2,10 @@
 public class App {
     public static void main(String[] args) {
 
-        String expressao = "4*8+2*(1+3)+(5*(8.4/2)+2/(4/4))"; // arrumar 6.2.2.3 -> error
+        String expressao = "(4*8+2*(1+3)+(5*(8.4/2)+2/(4/4)))"; // arrumar 6.2.2.3 -> error
         char c[] = new char[expressao.length()];
         String[] pegaExpressao = new String[expressao.length()];
-        double[] numeros = new double[expressao.length()];
+        double[][] numeros = new double[expressao.length()][expressao.length()];
         String armazenaNumero = "";
         int contAbreFecha = 0;
         int contOperadores = 0;
@@ -23,7 +23,7 @@ public class App {
             if (d == '+' || d == '-' || d == '*' || d == '/' || d == '.') {
                 contOperadores++;
 
-            }else {
+            } else {
                 contOperadores = 0;
             }
             if (contOperadores > 1) {
@@ -70,9 +70,10 @@ public class App {
 
         if (erro == 0) {
             System.out.println("executa a expressão");
+
             for (int j = maiorNumAbreFecha; j >= 0; j--) {
                 for (char d : c) {
-                    
+
                     if (d == '(') {
                         contAbreFecha++;
 
@@ -81,55 +82,70 @@ public class App {
 
                     }
 
-                    if (contAbreFecha==j) {
-                    
-                        if (pegaExpressao[cont]==null) {
+                    if (contAbreFecha == j) {
 
-                            if (d != '(' && d != ')') {
-                                
-                                pegaExpressao[cont] = Character.toString(d);  
-                            } 
-                           
+                        if (pegaExpressao[cont] == null) {
 
-                        }else{
-                            if (d != '(' && d != ')') {
-                                
-                                pegaExpressao[cont] = pegaExpressao[cont]+d; 
-                            } 
-                            
-                            if(d == '(' || d == ')') {
+                            pegaExpressao[cont] = Character.toString(d);
 
-                                for ( k = 0; k < pegaExpressao[cont].length(); k++) {
+                        } else {
 
-                                    if(pegaExpressao[cont].charAt(k) != '+' && pegaExpressao[cont].charAt(k) != '-' && pegaExpressao[cont].charAt(k) != '*' && pegaExpressao[cont].charAt(k) != '/' && pegaExpressao[cont].charAt(k) != '(' && pegaExpressao[cont].charAt(k) != ')'){
+                            pegaExpressao[cont] = pegaExpressao[cont] + d;
+
+                            if (d == '(' || d == ')') {
+
+                                for (k = 0; k < pegaExpressao[cont].length(); k++) {
+
+                                    if (pegaExpressao[cont].charAt(k) != '+' && pegaExpressao[cont].charAt(k) != '-'
+                                            && pegaExpressao[cont].charAt(k) != '*'
+                                            && pegaExpressao[cont].charAt(k) != '/'
+                                            && pegaExpressao[cont].charAt(k) != '('
+                                            && pegaExpressao[cont].charAt(k) != ')') {
+
                                         char tempoChar = pegaExpressao[cont].charAt(k);
                                         armazenaNumero = armazenaNumero + Character.toString(tempoChar);
-                                    }else{
-                                        System.out.println(armazenaNumero);
-                                        armazenaNumero="";
+
+                                    } else {
+                                        if (armazenaNumero != "") {
+                                            System.out.println(armazenaNumero);
+                                            numeros[cont][i] = Double.parseDouble(armazenaNumero);
+                                            i++;
+                                        }
+                                        armazenaNumero = "";
+
                                     }
-                                    
-                                
+
                                 }
                                 System.out.println(armazenaNumero);
-                                armazenaNumero="";
+                                if (armazenaNumero != "") {
+                                    numeros[cont][i] = Double.parseDouble(armazenaNumero);
+                                    i++;
+                                }
+                                armazenaNumero = "";
                                 cont++;
-    
+                                i = 0;
+
                             }
                         }
 
-                       
-                                            
-                    
                     }
-                
+
                 }
-                
+
             }
             for (int j = 0; j < cont; j++) {
-               // System.out.println(pegaExpressao[j]);
+
+                for (k = 0; k < pegaExpressao[j].length(); k++) {
+                    System.out.println(numeros[j][k]);
+                }
+                System.out.println("\n\n");
             }
-           
+
+            for (int j = 0; j < cont; j++) {
+
+                System.out.println(pegaExpressao[j]);
+
+            }
 
         } else {
             System.out.println("Não executa a expressão");
